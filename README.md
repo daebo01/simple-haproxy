@@ -13,3 +13,4 @@
 | WHITELIST_SRCS | whitelist cidr | 1.1.1.1/32,2.2.2.0/24 |
 | BLACKLIST_SRCS | blacklist cidr, whitelist가 있으면 동작 안함 | 1.1.1.1/32,2.2.2.0/24 |
 | MAPPING | frontend와 backend의 mapping | frontendport1:backendip1:backendport1,frontendport2:backendip2:backendport2 |
+| USE_PROXY_PROTOCOL | backend에 proxy protocol 패킷 보내기 여부 (default true) | 1 or 0 |

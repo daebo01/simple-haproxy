@@ -23,10 +23,16 @@ writeMapping() {
     if [ ! -z "$BLACKLIST_SRCS" ]; then
         echo "    acl blacklist_src src -f blacklist.txt" >> haproxy.cfg
         echo "    tcp-request connection silent-drop if blacklist_src" >> haproxy.cfg
+        echo >> haproxy.cfg
+    fi
+
+    proxyProtocol="send-proxy-v2"
+    if [[ -z "$USE_PROXY_PROTOCOL" || "$USE_PROXY_PROTOCOL" == "0" || "$USE_PROXY_PROTOCOL" == "false" ]]; then
+        proxyProtocol=""
     fi
 
     echo "backend out${frontendPort}" >> haproxy.cfg
-    echo "    server s1 ${backend} check inter 5s fall 5 rise 5 send-proxy-v2" >> haproxy.cfg
+    echo "    server s1 ${backend} check inter 5s fall 5 rise 5 ${proxyProtocol}" >> haproxy.cfg
     echo >> haproxy.cfg
 }
 
@@ -35,6 +41,7 @@ trap _term SIGTERM
 MAX_CONN=${MAX_CONN:-10000}
 STATS_PORT=${STATS_PORT:-8484}
 ADMIN_SRCS=${ADMIN_SRCS:-0.0.0.0/0}
+USE_PROXY_PROTOCOL=${USE_PROXY_PROTOCOL:-1}
 
 # 설정 파일 생성
 if [ ! -z "$ADMIN_SRCS" ]; then
